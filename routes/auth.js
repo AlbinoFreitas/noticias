@@ -9,16 +9,20 @@ router.get('/', (req, res) => {
 })
 
 router.post('/', async (req, res) => {
-    const user = await User.findOne({username: req.body.username})
-    
-    if(user){
-        const isValid = await user.checkPassword(req.body.password)
-        if(isValid){
-            req.session.user = user
-            res.redirect('/restrito/noticias')
-        }
-    }
-    res.redirect('/login')
+    User.findOne({username: req.body.username}).then(user => {
+        user.checkPassword(req.body.password).then(isValid => {
+            if(isValid){
+                req.session.user = user
+                res.redirect('/restrito/noticias')
+            }else{
+                res.redirect('/login')
+            }
+        }).catch(() => {
+            res.redirect('/login')
+        })
+    }).catch(() => {
+        res.redirect('/login')
+    })
 })
 
 module.exports = router
