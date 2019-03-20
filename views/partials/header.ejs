@@ -29,13 +29,25 @@
           <li class="nav-item">
             <a class="nav-link" href="/noticias">Publico</a>
           </li>
-          <% if('user' in locals ){%>
-            <li class="nav-item">
-              <a class="nav-link" href="/restrito/noticias">Restrito</a>
-            </li>
+          <% if('user' in locals ){ %>
+            <% if(locals.role === 'restrito' ) {%>
+              <li class="nav-item">
+                <a class="nav-link" href="/restrito/noticias">Restrito</a>
+              </li>
+            <% } %>
+            <% if(locals.role === 'admin' ) { %>
+              <li class="nav-item">
+                <a class="nav-link" href="/admin/noticias">Admin</a>
+              </li>
+            <% } %>
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><%= locals.user.username %></a>
               <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <% if(locals.user.roles.length > 1){ %>
+                  <% locals.user.roles.forEach(role => { %>
+                    <a class="dropdown-item btn-sm" href="/change-role/<%= role %>"><%= role %></a>
+                  <% }) %>
+                <% } %>
                 <a class="dropdown-item btn-sm" href="/logout">Sair</a>
               </div>
             </li>

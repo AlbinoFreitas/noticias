@@ -9,6 +9,7 @@ const noticia  = require('./routes/noticia')
 const restrito = require('./routes/restrito')
 const auth     = require('./routes/auth')
 const pages    = require('./routes/pages')
+const admin    = require('./routes/admin')
 
 const app        = express()
 const port       = process.env.PORT || 3000
@@ -30,13 +31,22 @@ app.use('/', auth)
 app.use('/', pages)
 app.use('/restrito', restrito)
 app.use('/noticias', noticia)
+app.use('/admin', admin)
 
 const createInitialUser = async () => {
-    const total = await User.countDocuments({ username: 'albinofreitas' })
+    const total = await User.countDocuments()
     if(total === 0){
+        const admin = new User({
+            username: 'admin',
+            password: '123',
+            roles: ['admin', 'restrito']
+        })
+        await admin.save()
+
         const user = new User({
-            username: 'albinofreitas',
-            password: '123456'
+            username: 'user',
+            password: '123',
+            roles: ['restrito']
         })
         await user.save()
     }
