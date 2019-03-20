@@ -26,23 +26,10 @@ app.use(session({
     saveUninitialized: true 
 }))
 
-app.use((req, res, next) => {
-    if('user' in req.session){
-        res.locals.user = req.session.user
-    }
-    next()
-})
-app.use('/restrito', (req, res, next) => {
-    if('user' in req.session){
-        return next()
-    }
-    res.redirect('/login')
-})
-
+app.use('/', auth)
+app.use('/', pages)
 app.use('/restrito', restrito)
 app.use('/noticias', noticia)
-app.use('/login', auth)
-app.use('/', pages)
 
 const createInitialUser = async () => {
     const total = await User.countDocuments({ username: 'albinofreitas' })
@@ -61,7 +48,7 @@ mongoose
         app.listen(port, (err) => {
             if(!err){
                 console.log('server running at port: '+port)
-                createInitialUser() 
+                createInitialUser()
             }
         })
     })

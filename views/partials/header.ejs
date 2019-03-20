@@ -30,12 +30,15 @@
             <a class="nav-link" href="/noticias">Publico</a>
           </li>
           <% if('user' in locals ){%>
-          <li class="nav-item">
-            <a class="nav-link" href="/restrito/noticias">Restrito</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="javascript: void(0)"><%= locals.user.username %></a>
-          </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/restrito/noticias">Restrito</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><%= locals.user.username %></a>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item btn-sm" href="/logout">Sair</a>
+              </div>
+            </li>
           <% }else{ %>
             <li class="nav-item active">
             <a class="nav-link" href="/login">Login <span class="sr-only">(current)</span></a>
